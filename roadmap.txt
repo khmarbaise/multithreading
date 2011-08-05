@@ -1,0 +1,30 @@
+
+The idea is to parallelize the running of reading the revisions and
+index the revision and combine them to a full index.
+
+
+  Producer:
+    - Read the repository and get the information about
+      how many revisions and which revisions are available etc.
+
+    - Produce blocks of revisions (like 1..1000, 1001..2000 etc.)
+ 
+      This concept will work also if we use different version control systems
+      like git. The only difference is how to describe the revisions ranges.
+      
+      -> start a thread for every block. (Consumer)
+
+  Consumer:
+    - Index the given revision range into a separate file
+
+
+
+  MergeConsumer:
+    - Merge the resulting index into the overall index.
+    - This should only be done if we have at least 4 or may be 5 
+      indexes generated?
+    
+
+ExecutorCompletionService (Java)
+  - See how to use that for MergeConsumer and may be for Consumer too.
+
