@@ -11,92 +11,100 @@ import java.util.concurrent.Future;
 import org.apache.log4j.Logger;
 import org.testng.annotations.Test;
 
-import com.soebes.multithreading.cp.DoSomethingTimeConsuming;
-import com.soebes.multithreading.cp.Index;
-import com.soebes.multithreading.cp.VersionRange;
-
 /**
  * @author Karl Heinz Marbaise
  */
 public class MemorizerTest {
-	private static final Logger LOGGER = Logger.getLogger(MemorizerTest.class);
+    private static final Logger LOGGER = Logger.getLogger(MemorizerTest.class);
 
-	public VersionRange createRange(int start, int end) {
-		List<String> versionRange = new ArrayList<String>();
-		for (int i = start; i < end; i++) {
-			versionRange.add(Integer.toString(i));
-		}
-		VersionRange v = new VersionRange(versionRange);
-		return v;
-	}
+    public VersionRange createRange(int start, int end) {
+        List<String> versionRange = new ArrayList<String>();
+        for (int i = start; i < end; i++) {
+            versionRange.add(Integer.toString(i));
+        }
+        VersionRange v = new VersionRange(versionRange);
+        return v;
+    }
 
-	// @Test
-	// public void xTest() {
-	// double U_CPU = 0.9; // (0..1) target CPU utilization
-	// int N_CPUS = Runtime.getRuntime().availableProcessors();
-	// double W = 1; //wait time.
-	// double C = 1; //compute time
-	// int N_THREADS = (int)(N_CPUS * U_CPU * ( 1.0 + (W/C)));
-	//
-	// LOGGER.info("N_CPUS:" + N_CPUS);
-	// LOGGER.info("N_THREADS:" + N_THREADS);
-	//
-	// }
+    public int calculateNumberOfThreads(double utilization, double waittime, double computetime) {
+        int numberOfCpus = Runtime.getRuntime().availableProcessors();
 
-	@Test
-	public void firstStart() throws InterruptedException, ExecutionException {
-		ExecutorService exec = Executors.newFixedThreadPool(5);
-		ExecutorCompletionService<Index> execCompletion = new ExecutorCompletionService<Index>(
-				exec);
+        double u_cpu = utilization; // (0..1) target CPU utilization
+        double W = waittime; // wait time.
+        double C = computetime; // compute time
+        int threads = (int) (numberOfCpus * u_cpu * (1.0 + (W / C)));
+        LOGGER.info("Number of CPU's: " + numberOfCpus
+                + " utilization:" + utilization
+                + " waittime:" + waittime
+                + " computetime:" + computetime +
+                " threads:" + threads);
+        return threads;
+    }
 
-		// ArrayList<DoSomethingTimeConsuming> taskList = new
-		// ArrayList<DoSomethingTimeConsuming>();
+    @Test
+    public void firstStart() throws InterruptedException, ExecutionException {
 
-		List<Future<Index>> startedTasks = new ArrayList<Future<Index>>();
-		List<Future<Index>> stoppedTasks = new ArrayList<Future<Index>>();
+        int numberOfThreads = calculateNumberOfThreads(0.9, 5, 1);
 
-		List<Future<Index>> producerTasks = new ArrayList<Future<Index>>();
+        ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
 
-		for (int i = 0; i < 1000; i++) {
-			int start = i * 100 + 1;
-			int ende = i * 100 + 100;
-			LOGGER.info("start:" + start + " ende:" + ende);
-			DoSomethingTimeConsuming task = new DoSomethingTimeConsuming(
-					new Long(i), createRange(start, ende));
-			// taskList.add(task);
+        ExecutorCompletionService<Index> execCompletion = new ExecutorCompletionService<Index>(exec);
 
-			LOGGER.info("exec.submit(" + i + " task");
-			startedTasks.add(execCompletion.submit(task));
+        Integer numberOfStartedTasks = new Integer(0);
+        Integer numberOfStoppedTasks = new Integer(0);;
 
-		}
+        for (int i = 0; i < 100; i++) {
+            int start = i * 100 + 1;
+            int ende = i * 100 + 100;
+            LOGGER.info("start:" + start + " ende:" + ende);
 
-		// Check if all started tasks have been finished.
-		while (stoppedTasks.size() < startedTasks.size()) {
-			// No not yet.
-			Future<Index> result = execCompletion.poll();
-			if (result == null) {
-				// LOGGER.info("No task has stopped.");
-				// Nothing stopped yet.
-				continue;
-			}
-			stoppedTasks.add(result);
-			producerTasks.add(result);
-			LOGGER.info("Task has stopped.");
+            DoSomethingTimeConsuming task = new DoSomethingTimeConsuming(new Long(i), createRange(start, ende));
 
-			if (producerTasks.size() > 8) {
-				//
-				LOGGER.info("We got at least 8 producer tasks. Run mergeIndex()");
-				// mergeIndex (producerTasks);
-				producerTasks = new ArrayList<Future<Index>>();
-			}
-		}
+            LOGGER.info("exec.submit(" + i + ", task)");
+            
+            execCompletion.submit(task);
 
-		// Are there some stopped task left over?
-		if (producerTasks.size() > 0) {
-			LOGGER.info("We got at least 1 producer tasks. Run mergeIndex()");
-			//
-			// mergeIndex (producerTasks);
-		}
+            numberOfStartedTasks++;
 
-	}
+        }
+
+        List<Index> indexerTasks = new ArrayList<Index>();
+
+        // Check if all started tasks have been finished.
+        while (numberOfStoppedTasks < numberOfStartedTasks) {
+            // No not yet.
+            Future<Index> result = execCompletion.poll();
+            if (result == null) {
+                // LOGGER.info("No task has stopped.");
+                // Nothing stopped yet.
+                continue;
+            }
+            indexerTasks.add(result.get());
+            numberOfStoppedTasks++;
+            LOGGER.info("Task has stopped.");
+
+            if (indexerTasks.size() > 8) {
+                //
+                LOGGER.info("We got at least 8 producer tasks. Run mergeIndex()");
+                // mergeIndex (producerTasks);
+                String s = "";
+                for (Index index : indexerTasks) {
+                    s += "#" + index.getName();
+                }
+                Index dest = new Index();
+                dest.setName("D-" + s);
+                IndexMerger indexMerge = new IndexMerger(dest, indexerTasks);
+                execCompletion.submit(indexMerge);
+                indexerTasks = new ArrayList<Index>();
+            }
+        }
+
+        // Are there some stopped task left over?
+        if (indexerTasks.size() > 0) {
+            LOGGER.info("We got at least 1 producer tasks. Run mergeIndex()");
+            //
+            // mergeIndex (producerTasks);
+        }
+
+    }
 }

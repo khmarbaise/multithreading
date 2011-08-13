@@ -21,6 +21,16 @@ public class UtilizationTest {
 		};
 	}
 
+	public int calculateNumberOfThreads(double utilization, double waittime, double computetime) {
+		int N_CPUS = Runtime.getRuntime().availableProcessors();
+
+		double U_CPU = utilization; // (0..1) target CPU utilization
+		double W = waittime; // wait time.
+		double C = computetime; // compute time
+		int threads = (int) (N_CPUS * U_CPU * (1.0 + (W / C)));
+		return threads;
+	}
+
 	@Test(dataProvider = "test")
 	public void xTest(double utilization, double waittime, double computetime) {
 		int N_CPUS = Runtime.getRuntime().availableProcessors();
