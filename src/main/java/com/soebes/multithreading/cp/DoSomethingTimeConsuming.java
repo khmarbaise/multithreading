@@ -43,12 +43,12 @@ public class DoSomethingTimeConsuming implements Callable<Index> {
         Index i = new Index();
         Random r = new Random(new Date().getTime());
         int value = r.nextInt(100); // 0..99
-        String first = versionRange.getVersionRange().get(0);
-        String last = versionRange.getVersionRange().get(versionRange.getVersionRange().size() - 1);
+        Version first = versionRange.getVersionRange().get(0);
+        Version last = versionRange.getVersionRange().get(versionRange.getVersionRange().size() - 1);
         i.setName(
             "number: " + number
-            + " first:" + first
-            + " last:" + last
+            + " first:" + first.getVersion()
+            + " last:" + last.getVersion()
             + " random:" + Integer.toString(value));
         LOGGER.info("Started computation[" + number + "]: first:" + first
                 + " last:" + last + " random: " + Integer.toString(value));
@@ -57,9 +57,9 @@ public class DoSomethingTimeConsuming implements Callable<Index> {
         waitMilliSeconds(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
         // Thread.sleep(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
 
-        i.setName("S-" + first + "-" + last);
-        LOGGER.info("Ended computation[" + number + "]: first:" + first
-                + " last:" + last + " random: " + Integer.toString(value));
+        i.setName("S-" + first.getVersion() + "-" + last.getVersion());
+        LOGGER.info("Ended computation[" + number + "]: first:" + first.getVersion()
+                + " last:" + last.getVersion() + " random: " + Integer.toString(value));
 
         return i;
     }

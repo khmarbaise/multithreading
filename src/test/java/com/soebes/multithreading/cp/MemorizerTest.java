@@ -18,9 +18,9 @@ public class MemorizerTest {
     private static final Logger LOGGER = Logger.getLogger(MemorizerTest.class);
 
     public VersionRange createRange(int start, int end) {
-        List<String> versionRange = new ArrayList<String>();
+        List<Version> versionRange = new ArrayList<Version>();
         for (int i = start; i < end; i++) {
-            versionRange.add(Integer.toString(i));
+            versionRange.add(new Version(Integer.toString(i)));
         }
         VersionRange v = new VersionRange(versionRange);
         return v;
@@ -61,7 +61,7 @@ public class MemorizerTest {
             DoSomethingTimeConsuming task = new DoSomethingTimeConsuming(new Long(i), createRange(start, ende));
 
             LOGGER.info("exec.submit(" + i + ", task)");
-            
+
             execCompletion.submit(task);
 
             numberOfStartedTasks++;
