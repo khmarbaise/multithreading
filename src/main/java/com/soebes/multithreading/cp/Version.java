@@ -14,12 +14,24 @@ public class Version {
         this.version = version;
     }
 
+    public Version(Integer version) {
+        this.version = version.toString();
+    }
+
     public String getVersion() {
         return version;
     }
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public boolean isUNDEFINED() {
+        if (UNDEFINED.equals(this)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -32,19 +44,25 @@ public class Version {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (!(obj instanceof Version)) {
             return false;
+        }
         Version other = (Version) obj;
         if (version == null) {
-            if (other.version != null)
+            if (other.version != null) {
                 return false;
-        } else if (!version.equals(other.version))
+            }
+        } else if (!version.equals(other.version)) {
             return false;
+        }
         return true;
     }
+
 
 }

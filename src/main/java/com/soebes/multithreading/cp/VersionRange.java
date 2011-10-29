@@ -26,13 +26,35 @@ public class VersionRange {
         return versionRange;
     }
 
+    public boolean hasVersions() {
+        if (versionRange.size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public int size() {
         return versionRange.size();
     }
     
+    public void add(Version version) {
+        if (!versionRange.contains(version)) {
+            versionRange.add(version);
+        }
+    }
+
     public Version getFirstVersion() {
-        if (size() > 0) {
+        if (hasVersions()) {
             return versionRange.get(0);
+        } else {
+            return Version.UNDEFINED;
+        }
+    }
+
+    public Version getLastVersion() {
+        if (hasVersions()) {
+            return versionRange.get(versionRange.size() - 1);
         } else {
             return Version.UNDEFINED;
         }

@@ -33,6 +33,12 @@ public class RangeStartTest {
     }
 
     @Test
+    public void startStopGiven() {
+        VersionRange vr = createVersionRange(1, 10000);
+        
+    }
+
+    @Test
     public void xtest() {
         //Express the following with ranges to be independent from
         //real version numbers. This is the idea to get that

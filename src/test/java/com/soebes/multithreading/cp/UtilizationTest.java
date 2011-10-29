@@ -21,51 +21,51 @@ public class UtilizationTest {
 		};
 	}
 
-	public int calculateNumberOfThreads(double utilization, double waittime, double computetime) {
-		int N_CPUS = Runtime.getRuntime().availableProcessors();
+    public int calculateNumberOfThreads(double utilization, double waittime, double computetime) {
+        int N_CPUS = Runtime.getRuntime().availableProcessors();
 
-		double U_CPU = utilization; // (0..1) target CPU utilization
-		double W = waittime; // wait time.
-		double C = computetime; // compute time
-		int threads = (int) (N_CPUS * U_CPU * (1.0 + (W / C)));
-		return threads;
-	}
+        double U_CPU = utilization; // (0..1) target CPU utilization
+        double W = waittime; // wait time.
+        double C = computetime; // compute time
+        int threads = (int) (N_CPUS * U_CPU * (1.0 + (W / C)));
+        return threads;
+    }
 
-	@Test(dataProvider = "test")
-	public void xTest(double utilization, double waittime, double computetime) {
-		int N_CPUS = Runtime.getRuntime().availableProcessors();
+    @Test(dataProvider = "test")
+    public void xTest(double utilization, double waittime, double computetime) {
+        int N_CPUS = Runtime.getRuntime().availableProcessors();
 
-		double U_CPU = utilization; // (0..1) target CPU utilization
-		double W = waittime; // wait time.
-		double C = computetime; // compute time
-		int N_THREADS = (int) (N_CPUS * U_CPU * (1.0 + (W / C)));
+        double U_CPU = utilization; // (0..1) target CPU utilization
+        double W = waittime; // wait time.
+        double C = computetime; // compute time
+        int N_THREADS = (int) (N_CPUS * U_CPU * (1.0 + (W / C)));
 
-		System.out.println("utilization:" + utilization + " waittime:"
-				+ waittime + " computetime:" + computetime + " N_THREADS: "
-				+ N_THREADS);
-	}
+        System.out.println("utilization:" + utilization + " waittime:"
+                + waittime + " computetime:" + computetime + " N_THREADS: "
+                + N_THREADS);
+    }
 
-	public void waitMilliSeconds(long milliSeconds) {
-		long start = System.currentTimeMillis();
-		
-		while ( (System.currentTimeMillis() - start) < milliSeconds ) {
-			double s = Math.sin(System.currentTimeMillis());
-			//The following line is intended to prevent any compiler from
-			//optimizing this code away!
-			if (String.valueOf(s).hashCode() == (int)s) {
-				System.out.print(" ");
-			}
-		}
-		
-	}
+    public void waitMilliSeconds(long milliSeconds) {
+        long start = System.currentTimeMillis();
 
-	@Test
-	public void timingTest() {
-		long start = System.currentTimeMillis();
+        while ((System.currentTimeMillis() - start) < milliSeconds) {
+            double s = Math.sin(System.currentTimeMillis());
+            // The following line is intended to prevent any compiler from
+            // optimizing this code away!
+            if (String.valueOf(s).hashCode() == (int) s) {
+                System.out.print(" ");
+            }
+        }
 
-		waitMilliSeconds(20000);
-		
-		long stop = System.currentTimeMillis();
-		System.out.println("Runtime: " + (stop-start) + " ms");
-	}
+    }
+
+    @Test
+    public void timingTest() {
+        long start = System.currentTimeMillis();
+
+        waitMilliSeconds(20000);
+
+        long stop = System.currentTimeMillis();
+        System.out.println("Runtime: " + (stop - start) + " ms");
+    }
 }
