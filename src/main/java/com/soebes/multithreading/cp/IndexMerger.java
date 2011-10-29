@@ -18,13 +18,13 @@ public class IndexMerger implements Callable<Index> {
 
     private Index destinationIndex;
     private List<Index> sourceIndexes;
-    
+
     public IndexMerger(Index destinationIndex, List<Index> sourceIndexes) {
         this.destinationIndex = destinationIndex;
         this.sourceIndexes = sourceIndexes;
     }
 
-    public void waitMilliSeconds(long milliSeconds) {
+    private void waitMilliSeconds(long milliSeconds) {
         long start = System.currentTimeMillis();
 
         while ((System.currentTimeMillis() - start) < milliSeconds) {
@@ -34,7 +34,7 @@ public class IndexMerger implements Callable<Index> {
             if (String.valueOf(s).hashCode() == (int) s) {
                 System.out.print(" ");
             }
-            
+
             if (((System.currentTimeMillis() - start) % 500) == 0) {
                 LOGGER.info("Indexer running.");
             }
