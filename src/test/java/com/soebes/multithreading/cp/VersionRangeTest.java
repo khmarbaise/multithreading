@@ -6,27 +6,14 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 public class VersionRangeTest {
-//    @Test
-//    public void f() {
-//	List<Version> versionRange = new ArrayList<Version>();
-//
-//	for (int i = 0; i < 1000000; i++) {
-//	    Version v = new Version(Integer.toString(i));
-//	    versionRange.add(v);
-//	}
-//
-//	VersionRange vr = new VersionRange(versionRange);
-//
-//    }
-    
-    
+
     @Test
     public void checkIfHasVersionIsFalseIfNoVersionHasBeenAdded() {
         VersionRange vr = new VersionRange();
 
         assertFalse(vr.hasVersions());
     }
-    
+
     @Test
     public void checkIfAddWorks() {
         VersionRange vr = new VersionRange();
@@ -37,7 +24,7 @@ public class VersionRangeTest {
 
         assertTrue(vr.hasVersions());
         assertTrue(vr.size() == 10);
- 
+
     }
 
     @Test
@@ -51,7 +38,7 @@ public class VersionRangeTest {
         assertTrue(vr.hasVersions());
         assertTrue(vr.size() == 10);
         assertTrue(vr.getLastVersion().equals(new Version(9)));
- 
+
     }
 
     @Test
