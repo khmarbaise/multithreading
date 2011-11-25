@@ -69,4 +69,19 @@ public class VersionRangeTest {
 
     }
 
+    @Test
+    public void getVersionRangeFromInstanceOfVersionRange() {
+        VersionRange vr = new VersionRange();
+        for (int i = 0; i < 100; i++) {
+            Version v = new Version(Integer.toString(i));
+            vr.add(v);
+        }
+
+        VersionRange vrNew = vr.getRange(0, 20);
+        assertTrue(vrNew.size() == 20);
+        
+        VersionRange vrNew1 = vr.getRange(90);
+        assertTrue(vrNew1.size() == 10);
+
+    }
 }

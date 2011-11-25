@@ -1,12 +1,15 @@
 package com.soebes.multithreading.cp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- * Will handle a revision range
- * like 1..1000 or 
- * abc....ccccc (git like).
+ * This class will handle a range of versions.
+ * 
+ * This is implemented to handle version not only based on 
+ * integer number. This will work also for version which look
+ * like version coming from git.
  * 
  * @author Karl Heinz Marbaise
  */
@@ -58,5 +61,31 @@ public class VersionRange {
         } else {
             return Version.UNDEFINED;
         }
+    }
+
+    public VersionRange getRange(int from) {
+        return getRange(from, versionRange.size());
+    }
+
+    public VersionRange getRange(int from, int to) {
+        if (from < 0) {
+            throw new IllegalArgumentException("from must be greater or equal 0");
+        }
+        if (from > to) {
+            throw new IllegalArgumentException("from must be less or equal to");
+        }
+        
+        if (from >= versionRange.size()) {
+            //
+        }
+        if (to >= versionRange.size()) {
+            //
+        }
+
+        ArrayList<Version> result = new ArrayList<Version>();
+        for (int position = from; position < to; position++) {
+            result.add(versionRange.get(position));
+        }
+        return new VersionRange(result);
     }
 }

@@ -83,6 +83,7 @@ public class MemorizerTest {
             numberOfStoppedTasks++;
             LOGGER.info("Task has stopped.");
 
+            //This must be defined as a constant or may be controlled by the size of a pool ? (ThreadPool ?)
             if (indexerTasks.size() > 8) {
                 //
                 LOGGER.info("We got at least 8 producer tasks. Run mergeIndex()");
