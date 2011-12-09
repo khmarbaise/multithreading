@@ -43,8 +43,8 @@ public class DoSomethingTimeConsuming implements Callable<Index> {
         Index i = new Index();
         Random r = new Random(new Date().getTime());
         int value = r.nextInt(100); // 0..99
-        Version first = versionRange.getVersionRange().get(0);
-        Version last = versionRange.getVersionRange().get(versionRange.getVersionRange().size() - 1);
+        Version first = versionRange.getFirstVersion();
+        Version last = versionRange.getLastVersion();
         i.setName(
             "number: " + number
             + " first:" + first.getVersion()

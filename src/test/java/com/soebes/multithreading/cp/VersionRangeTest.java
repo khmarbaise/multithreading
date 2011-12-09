@@ -1,5 +1,6 @@
 package com.soebes.multithreading.cp;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -77,11 +78,28 @@ public class VersionRangeTest {
             vr.add(v);
         }
 
-        VersionRange vrNew = vr.getRange(0, 20);
+        VersionRange vrNew = vr.getRange(0, 19);
         assertTrue(vrNew.size() == 20);
         
         VersionRange vrNew1 = vr.getRange(90);
         assertTrue(vrNew1.size() == 10);
 
+    }
+
+    @Test
+    public void getVersionBlockRange() {
+        VersionRange vr = new VersionRange();
+        for (int i = 0; i < 100; i++) {
+            Version v = new Version(Integer.toString(i));
+            vr.add(v);
+        }
+        //100 elements will be divided into 5 blocks
+        //which means to have each block 20 elements.
+        //Block number 2 means (0,1,2) starting with
+        //element (0..19, 20..39, 40..59) 40...
+        VersionRange vrResult = vr.getBlockRange(5, 2);
+        assertTrue(vrResult.size() == 20);
+        assertEquals(vrResult.getFirstVersion().getVersion(), "40");
+        assertEquals(vrResult.getLastVersion().getVersion(), "59");
     }
 }
