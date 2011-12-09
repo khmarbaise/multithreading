@@ -44,14 +44,14 @@ public class MemorizerTest {
     @Test
     public void firstStart() throws InterruptedException, ExecutionException {
 
-        int numberOfThreads = calculateNumberOfThreads(0.9, 5, 1);
+        int numberOfThreads = calculateNumberOfThreads(0.9, 1, 1);
 
         ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
 
         ExecutorCompletionService<Index> execCompletion = new ExecutorCompletionService<Index>(exec);
 
         Integer numberOfStartedTasks = new Integer(0);
-        Integer numberOfStoppedTasks = new Integer(0);;
+        Integer numberOfStoppedTasks = new Integer(0);
 
         for (int i = 0; i < 100; i++) {
             int start = i * 100 + 1;
