@@ -54,8 +54,8 @@ public class DoSomethingTimeConsuming implements Callable<Index> {
                 + " last:" + last + " random: " + Integer.toString(value));
 
         // Really produce some kind of work for the CPU
-        waitMilliSeconds(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
-        // Thread.sleep(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
+//        waitMilliSeconds(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
+         Thread.sleep(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
 
         i.setName("S-" + first.getVersion() + "-" + last.getVersion());
         LOGGER.info("Ended computation[" + number + "]: first:" + first.getVersion()

@@ -66,7 +66,10 @@ public class MemorizerTest {
 
             numberOfStartedTasks++;
 
+            Thread.sleep(500);
         }
+
+        LOGGER.info("Submitted all tasks.");
 
         List<Index> indexerTasks = new ArrayList<Index>();
 
@@ -79,6 +82,7 @@ public class MemorizerTest {
                 // Nothing stopped yet.
                 continue;
             }
+
             indexerTasks.add(result.get());
             numberOfStoppedTasks++;
             LOGGER.info("Task has stopped.");
