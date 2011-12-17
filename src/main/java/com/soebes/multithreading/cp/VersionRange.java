@@ -93,6 +93,13 @@ public class VersionRange {
         return getRange(from, versionRange.size() - 1);
     }
 
+    /**
+     * Get a new instance of VersionRange which contains the
+     * elements <b>from</b> to <b>to</b>.
+     * @param from The index where to start from.
+     * @param to The index to go to.
+     * @return The new instance of VersionRange.
+     */
     public VersionRange getRange(int from, int to) {
         if (from < 0) {
             throw new IllegalArgumentException("from must be greater or equal 0");

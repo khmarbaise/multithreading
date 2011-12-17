@@ -1,10 +1,14 @@
 package com.soebes.multithreading.cp;
 
+import org.tmatesoft.svn.core.SVNLogEntry;
+
 public class Version {
 
     public final static Version UNDEFINED = new Version();
 
     private String version;
+    
+    private SVNLogEntry logEntry;
     
     private Version() {
         this.version = null;
@@ -16,6 +20,12 @@ public class Version {
 
     public Version(Integer version) {
         this.version = version.toString();
+    }
+
+    public Version(SVNLogEntry logEntry) {
+        super();
+        this.logEntry = logEntry;
+        this.version = Long.toString(logEntry.getRevision());
     }
 
     public String getVersion() {
@@ -34,6 +44,14 @@ public class Version {
         }
     }
 
+    public SVNLogEntry getLogEntry() {
+        return logEntry;
+    }
+
+    public void setLogEntry(SVNLogEntry logEntry) {
+        this.logEntry = logEntry;
+    }
+    
     @Override
     public String toString() {
         return this.version;
@@ -68,6 +86,5 @@ public class Version {
         }
         return true;
     }
-
 
 }
