@@ -114,4 +114,18 @@ public class VersionRange {
         }
         return new VersionRange(result);
     }
+
+    public List<VersionRange> getRangesBySize(int blockSize) {
+        ArrayList<VersionRange> result = new ArrayList<VersionRange>();
+        for(int start = 0; start<versionRange.size(); start += blockSize) {
+            int from = start;
+            int to = start + blockSize - 1;
+            if (to >= versionRange.size()) {
+                to = versionRange.size() - 1;
+            }
+            VersionRange vr = getRange(from, to);
+            result.add(vr);
+        }
+        return result;
+    }
 }

@@ -66,7 +66,6 @@ public class MemorizerTest {
 
             numberOfStartedTasks++;
 
-            Thread.sleep(500);
         }
 
         LOGGER.info("Submitted all tasks.");
