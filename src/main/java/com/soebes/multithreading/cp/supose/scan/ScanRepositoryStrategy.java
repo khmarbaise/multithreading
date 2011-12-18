@@ -1,13 +1,14 @@
 package com.soebes.multithreading.cp.supose.scan;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
-import org.testng.internal.thread.CountDownAdapter;
 
 import com.soebes.multithreading.cp.Index;
 import com.soebes.multithreading.cp.VersionRange;
@@ -53,8 +54,6 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)
         List<VersionRange> versionRanges = vr.getRangesBySize(300);
 
-        final CountDownLatch countDown = new CountDownLatch(versionRanges.size());
-        
         for (VersionRange versionRange : versionRanges) {
 
             LOGGER.info("scanRepository:" + versionRange.size());
@@ -66,14 +65,34 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
             execCompletion.submit(task);
         }
 
-        try {
-            countDown.await();
-        } catch (InterruptedException e) {
-            LOGGER.error("Failure:", e);
+        //Wait till all indexers are ended...
+
+        ArrayList<Index> resultList = new ArrayList<Index>();
+        
+        while (resultList.size() < versionRanges.size()) {
+            Future<Index> result = execCompletion.poll();
+            if (result == null) {
+                // LOGGER.info("No task has stopped.");
+                // Nothing stopped yet.
+                continue;
+            }
+
+            try {
+                Index resultIndex = result.get();
+                LOGGER.info("Index " + resultIndex.getName() + " done.");
+                resultList.add(resultIndex);
+            } catch (InterruptedException e) {
+                LOGGER.error("InterruptedException:", e);
+            } catch (ExecutionException e) {
+                LOGGER.error("ExectionException::", e);
+            }
+
         }
 
-        //Merge generated indexes into a single one (new) or an existing index.
+        LOGGER.info("All indexers have been ended.");
         
+        //Merge generated indexes into a single one (new) or an existing index.
+
     }
 
 }

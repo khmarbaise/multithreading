@@ -1,5 +1,6 @@
 package com.soebes.multithreading.cp;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -95,7 +96,7 @@ public class MemorizerTest {
                 for (Index index : indexerTasks) {
                     s += "#" + index.getName();
                 }
-                Index dest = new Index();
+                Index dest = new Index("Name", new File("test"));
                 dest.setName("D-" + s);
                 IndexMerger indexMerge = new IndexMerger(dest, indexerTasks);
                 execCompletion.submit(indexMerge);
