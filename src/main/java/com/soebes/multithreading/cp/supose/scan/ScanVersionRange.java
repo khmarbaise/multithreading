@@ -1,6 +1,5 @@
 package com.soebes.multithreading.cp.supose.scan;
 
-import java.io.File;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
@@ -17,9 +16,9 @@ public class ScanVersionRange implements Callable<Index>{
     private VersionRange versionRange;
     private RepositoryScanParameter repositoryScanParameter;
 
-    public ScanVersionRange(RepositoryScanParameter repositoryScanParamter, Repository repository, VersionRange versionRange) {
+    public ScanVersionRange(RepositoryScanParameter repositoryScanParamter, VersionRange versionRange) {
         super();
-        this.repository = repository;
+        this.repository = new Repository(repositoryScanParamter.getUri().toString(), repositoryScanParamter.getAuthenticationManager());
         this.versionRange = versionRange;
         this.repositoryScanParameter = repositoryScanParamter;
     }
@@ -35,17 +34,38 @@ public class ScanVersionRange implements Callable<Index>{
 
     @Override
     public Index call() throws Exception {
-        File indexDirectory = getRepositoryScanParameter().getIndexDirectory();
-        //Sub folder of the indexDirectory.
-        File taskIndexDirectory = new File(indexDirectory, getIndexFolderName());
-        Index idx = new Index();
-        idx.setName(getIndexFolderName());
-        
+
+        Index index = new Index(getIndexFolderName(), getRepositoryScanParameter().getIndexDirectory());
+
+//        Analyzer analyzer = AnalyzerFactory.createInstance();
+//        index.setAnalyzer(analyzer);
+//
+//        index.setCreate(create);
+//        IndexWriter indexWriter = index.createIndexWriter(indexDirectory);
+
         for (Version version : versionRange.getVersionRange()) {
             SVNLogEntry svnLogEntry = version.getLogEntry();
-            LOGGER.info("Indexing revision:" + svnLogEntry.getRevision());
+            if (svnLogEntry.getChangedPaths().size() > 0) {
+
+                try {
+                    LOGGER.info("Indexing revision:" + svnLogEntry.getRevision());
+//                    workOnChangeSet(writer, logEntry);
+                } catch (Exception e) {
+                    LOGGER.error("Error during workOnChangeSet() ", e);
+                } finally {
+//                    count++;
+                }
+
+            } else {
+                LOGGER.warn("Empty ChangeSet found in revision: " + svnLogEntry.getRevision());
+            }
+
         }
-        return idx;
+        
+//        index.optimize();
+//        index.close();
+
+        return index;
     }
 
     public Repository getRepository() {

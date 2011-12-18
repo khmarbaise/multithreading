@@ -1,5 +1,6 @@
 package com.soebes.multithreading.cp;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -40,7 +41,7 @@ public class DoSomethingTimeConsuming implements Callable<Index> {
 
     /** {@inheritDoc} */
     public Index call() throws Exception {
-        Index i = new Index();
+        Index i = new Index("XYZ", new File("test"));
         Random r = new Random(new Date().getTime());
         int value = r.nextInt(100); // 0..99
         Version first = versionRange.getFirstVersion();

@@ -1,11 +1,13 @@
 package com.soebes.multithreading.cp.supose.scan;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
+import org.testng.internal.thread.CountDownAdapter;
 
 import com.soebes.multithreading.cp.Index;
 import com.soebes.multithreading.cp.VersionRange;
@@ -29,9 +31,12 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
     }
 
 
+    /* (non-Javadoc)
+     * @see com.soebes.multithreading.cp.supose.scan.IScanBehaviour#scanRepository(com.soebes.multithreading.cp.supose.scan.RepositoryScanParameter)
+     */
     @Override
     public void scanRepository(RepositoryScanParameter parameter) {
-        
+
         int numberOfThreads = calculateNumberOfThreads(0.9, 1, 1);
 
         ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
@@ -45,20 +50,30 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         
         VersionRange vr = readLogs.getVersionRange();
 
-        //300 is only a test value ? (should be made configurable...(property file or command line parameter!)
+        //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)
         List<VersionRange> versionRanges = vr.getRangesBySize(300);
+
+        final CountDownLatch countDown = new CountDownLatch(versionRanges.size());
+        
         for (VersionRange versionRange : versionRanges) {
-            repository = new Repository(parameter.getUri().toString(), parameter.getAuthenticationManager());
 
             LOGGER.info("scanRepository:" + versionRange.size());
-            
-            ScanVersionRange task = new ScanVersionRange(parameter, repository, versionRange);
+
+            ScanVersionRange task = new ScanVersionRange(parameter, versionRange);
 
             LOGGER.info("exec.submit(task)");
 
             execCompletion.submit(task);
         }
 
+        try {
+            countDown.await();
+        } catch (InterruptedException e) {
+            LOGGER.error("Failure:", e);
+        }
+
+        //Merge generated indexes into a single one (new) or an existing index.
+        
     }
 
 }

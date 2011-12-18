@@ -15,6 +15,8 @@ public interface IScanBehaviour {
 
     /**
      * Scans the whole repository with a particular strategy.
+     * This can be used to implement different strategies e.g. multithreading or
+     * not.
      * @param parameter The instance of the parameter which will be used
      * to scan the repository.
      */
