@@ -14,7 +14,6 @@ public class RepositoryScanParameter {
     
     private File indexDirectory;
 
-    
     /**
      * @param authenticationManager The authentication manager which is used to authenticate.
      * @param uri

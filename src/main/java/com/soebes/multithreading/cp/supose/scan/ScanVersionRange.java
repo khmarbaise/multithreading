@@ -1,5 +1,6 @@
 package com.soebes.multithreading.cp.supose.scan;
 
+import java.io.File;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
@@ -14,20 +15,37 @@ public class ScanVersionRange implements Callable<Index>{
 
     private Repository repository;
     private VersionRange versionRange;
+    private RepositoryScanParameter repositoryScanParameter;
 
-    public ScanVersionRange(Repository repository, VersionRange versionRange) {
+    public ScanVersionRange(RepositoryScanParameter repositoryScanParamter, Repository repository, VersionRange versionRange) {
         super();
         this.repository = repository;
         this.versionRange = versionRange;
+        this.repositoryScanParameter = repositoryScanParamter;
+    }
+
+    /**
+     * Will create a folder name out of the information about the VersionRange we
+     * have.
+     * @return The name of index which will created by this Task.
+     */
+    private String getIndexFolderName() {
+        return "IDX-" + versionRange.getFirstVersion().getVersion() + "-" + versionRange.getLastVersion().getVersion();
     }
 
     @Override
     public Index call() throws Exception {
+        File indexDirectory = getRepositoryScanParameter().getIndexDirectory();
+        //Sub folder of the indexDirectory.
+        File taskIndexDirectory = new File(indexDirectory, getIndexFolderName());
+        Index idx = new Index();
+        idx.setName(getIndexFolderName());
+        
         for (Version version : versionRange.getVersionRange()) {
             SVNLogEntry svnLogEntry = version.getLogEntry();
             LOGGER.info("Indexing revision:" + svnLogEntry.getRevision());
         }
-        return null;
+        return idx;
     }
 
     public Repository getRepository() {
@@ -44,6 +62,14 @@ public class ScanVersionRange implements Callable<Index>{
 
     public void setVersionRange(VersionRange versionRange) {
         this.versionRange = versionRange;
+    }
+
+    public RepositoryScanParameter getRepositoryScanParameter() {
+        return repositoryScanParameter;
+    }
+
+    public void setRepositoryScanParameter(RepositoryScanParameter repositoryScanParameter) {
+        this.repositoryScanParameter = repositoryScanParameter;
     }
 
 }

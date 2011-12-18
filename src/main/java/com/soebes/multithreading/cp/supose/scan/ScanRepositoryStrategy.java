@@ -52,7 +52,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
 
             LOGGER.info("scanRepository:" + versionRange.size());
             
-            ScanVersionRange task = new ScanVersionRange(repository, versionRange);
+            ScanVersionRange task = new ScanVersionRange(parameter, repository, versionRange);
 
             LOGGER.info("exec.submit(task)");
 
