@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import com.soebes.multithreading.cp.Index;
+import com.soebes.multithreading.cp.RevisionRange;
 import com.soebes.multithreading.cp.Version;
 import com.soebes.multithreading.cp.VersionRange;
 
@@ -13,13 +14,13 @@ public class ScanVersionRange implements Callable<Index>{
     private static final Logger LOGGER = Logger.getLogger(ScanVersionRange.class);
 
     private Repository repository;
-    private VersionRange versionRange;
+    private RevisionRange revisionRange;
     private RepositoryScanParameter repositoryScanParameter;
 
-    public ScanVersionRange(RepositoryScanParameter repositoryScanParamter, VersionRange versionRange) {
+    public ScanVersionRange(RepositoryScanParameter repositoryScanParamter, RevisionRange revisionRange) {
         super();
         this.repository = new Repository(repositoryScanParamter.getUri().toString(), repositoryScanParamter.getAuthenticationManager());
-        this.versionRange = versionRange;
+        this.revisionRange = revisionRange;
         this.repositoryScanParameter = repositoryScanParamter;
     }
 
@@ -29,11 +30,17 @@ public class ScanVersionRange implements Callable<Index>{
      * @return The name of index which will created by this Task.
      */
     private String getIndexFolderName() {
-        return "IDX-" + versionRange.getFirstVersion().getVersion() + "-" + versionRange.getLastVersion().getVersion();
+        return "IDX-" + Long.toString(revisionRange.getFrom()) + "-" + Long.toString(revisionRange.getTo());
     }
 
     @Override
     public Index call() throws Exception {
+
+        ReadLogEntries readLogs = new ReadLogEntries(getRepository());
+
+        readLogs.readRevisions();
+        
+        VersionRange versionRange = readLogs.getVersionRange();
 
         Index index = new Index(getIndexFolderName(), getRepositoryScanParameter().getIndexDirectory());
 
@@ -76,12 +83,12 @@ public class ScanVersionRange implements Callable<Index>{
         this.repository = repository;
     }
 
-    public VersionRange getVersionRange() {
-        return versionRange;
+    public RevisionRange getRevisionRange() {
+        return revisionRange;
     }
 
-    public void setVersionRange(VersionRange versionRange) {
-        this.versionRange = versionRange;
+    public void setRevisionRange(RevisionRange revisionRange) {
+        this.revisionRange = revisionRange;
     }
 
     public RepositoryScanParameter getRepositoryScanParameter() {

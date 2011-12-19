@@ -9,9 +9,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
+import org.tmatesoft.svn.core.SVNException;
 
 import com.soebes.multithreading.cp.Index;
-import com.soebes.multithreading.cp.VersionRange;
+import com.soebes.multithreading.cp.RevisionRange;
 
 public class ScanRepositoryStrategy implements IScanBehaviour {
     private static final Logger LOGGER = Logger.getLogger(ScanRepositoryStrategy.class);
@@ -46,19 +47,22 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
 
         Repository repository = new Repository(parameter.getUri().toString(), parameter.getAuthenticationManager());
 
-        ReadLogEntries readLogs = new ReadLogEntries(repository);
-        readLogs.readRevisions();
+        long latestRevision;
+        try {
+            latestRevision = repository.getRepository().getLatestRevision();
+        } catch (SVNException e1) {
+            LOGGER.error("Problem during getting the latest revision.", e1);
+            return;
+        }
+
+        RevisionRange rRange = new RevisionRange(1, latestRevision);
         
-        VersionRange vr = readLogs.getVersionRange();
-
         //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)
-        List<VersionRange> versionRanges = vr.getRangesBySize(300);
+        List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(300);
 
-        for (VersionRange versionRange : versionRanges) {
+        for (RevisionRange revisionRange : revisionRanges) {
 
-            LOGGER.info("scanRepository:" + versionRange.size());
-
-            ScanVersionRange task = new ScanVersionRange(parameter, versionRange);
+            ScanVersionRange task = new ScanVersionRange(parameter, revisionRange);
 
             LOGGER.info("exec.submit(task)");
 
@@ -69,7 +73,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
 
         ArrayList<Index> resultList = new ArrayList<Index>();
         
-        while (resultList.size() < versionRanges.size()) {
+        while (resultList.size() < revisionRanges.size()) {
             Future<Index> result = execCompletion.poll();
             if (result == null) {
                 // LOGGER.info("No task has stopped.");
