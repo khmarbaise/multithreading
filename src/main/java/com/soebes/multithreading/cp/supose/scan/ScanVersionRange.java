@@ -39,7 +39,7 @@ public class ScanVersionRange implements Callable<Index>{
 
         LOGGER.info("ScanVersionRange reading log entries.");
 
-        ReadLogEntries readLogs = new ReadLogEntries(getRepository());
+        ReadLogEntries readLogs = new ReadLogEntries(getRepository(), getRevisionRange().getFrom(), getRevisionRange().getTo());
 
         readLogs.readRevisions();
         
