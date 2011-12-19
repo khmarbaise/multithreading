@@ -55,6 +55,8 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
             return;
         }
 
+        LOGGER.info("We need to read a repository from 1.." + latestRevision);
+
         RevisionRange rRange = new RevisionRange(1, latestRevision);
         
         //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)

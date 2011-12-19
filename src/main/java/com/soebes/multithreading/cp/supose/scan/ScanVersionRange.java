@@ -22,6 +22,7 @@ public class ScanVersionRange implements Callable<Index>{
         this.repository = new Repository(repositoryScanParamter.getUri().toString(), repositoryScanParamter.getAuthenticationManager());
         this.revisionRange = revisionRange;
         this.repositoryScanParameter = repositoryScanParamter;
+        LOGGER.info("ScanVersionRange (" + getRevisionRange().getFrom() + ", " + getRevisionRange().getTo() + ")");
     }
 
     /**
@@ -36,10 +37,14 @@ public class ScanVersionRange implements Callable<Index>{
     @Override
     public Index call() throws Exception {
 
+        LOGGER.info("ScanVersionRange reading log entries.");
+
         ReadLogEntries readLogs = new ReadLogEntries(getRepository());
 
         readLogs.readRevisions();
         
+        LOGGER.info("ScanVersionRange reading log entries done.");
+
         VersionRange versionRange = readLogs.getVersionRange();
 
         Index index = new Index(getIndexFolderName(), getRepositoryScanParameter().getIndexDirectory());
