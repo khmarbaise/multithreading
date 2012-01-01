@@ -54,13 +54,18 @@ public class ScanVersionRange implements Callable<Index>{
 //
 //        index.setCreate(create);
 //        IndexWriter indexWriter = index.createIndexWriter(indexDirectory);
-
+        
+        long indexedRevisions = 1;
+        
         for (Version version : versionRange.getVersionRange()) {
             SVNLogEntry svnLogEntry = version.getLogEntry();
             if (svnLogEntry.getChangedPaths().size() > 0) {
 
                 try {
-                    LOGGER.info("Indexing revision:" + svnLogEntry.getRevision());
+                    if (indexedRevisions % 100 == 0) {
+                        LOGGER.info("Indexing revision:" + svnLogEntry.getRevision());
+                    }
+                    indexedRevisions ++;
 //                    workOnChangeSet(writer, logEntry);
                 } catch (Exception e) {
                     LOGGER.error("Error during workOnChangeSet() ", e);
