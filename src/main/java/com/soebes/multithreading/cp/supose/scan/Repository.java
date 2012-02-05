@@ -24,6 +24,8 @@
  */
 package com.soebes.multithreading.cp.supose.scan;
 
+import java.net.URL;
+
 import org.apache.log4j.Logger;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
@@ -41,7 +43,7 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 public class Repository {
     private static Logger LOGGER = Logger.getLogger(Repository.class);
 
-    private String url = null;
+    private URL url = null;
     private SVNRepository repository = null;
     private ISVNAuthenticationManager authManager = null;
 
@@ -56,7 +58,7 @@ public class Repository {
      *            This will define the Authentication manager which is used.
      * @see ISVNAuthenticationManager
      */
-    public Repository(String url, ISVNAuthenticationManager authManager) {
+    public Repository(URL url, ISVNAuthenticationManager authManager) {
         setUrl(url);
         setAuthenticationManager(authManager);
 
@@ -114,8 +116,7 @@ public class Repository {
              * repository location used to create this SVNRepository. SVNURL is
              * a wrapper for URL strings that refer to repository locations.
              */
-            repository = SVNRepositoryFactory.create(SVNURL
-                    .parseURIEncoded(getUrl()));
+            repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(getUrl().toString()));
         } catch (SVNException svne) {
             // This can only happen if we use a protocol which is not
             // registered.
@@ -139,11 +140,11 @@ public class Repository {
         this.authManager = authManager;
     }
 
-    public String getUrl() {
+    public URL getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(URL url) {
         this.url = url;
     }
 

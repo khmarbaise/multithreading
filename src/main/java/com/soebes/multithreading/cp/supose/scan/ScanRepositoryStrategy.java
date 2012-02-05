@@ -45,7 +45,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
 
         ExecutorCompletionService<Index> execCompletion = new ExecutorCompletionService<Index>(exec);
 
-        Repository repository = new Repository(parameter.getUri().toString(), parameter.getAuthenticationManager());
+        Repository repository = new Repository(parameter.getUrl(), parameter.getAuthenticationManager());
 
         long latestRevision;
         try {

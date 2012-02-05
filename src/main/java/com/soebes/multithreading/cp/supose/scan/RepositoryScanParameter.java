@@ -1,16 +1,15 @@
 package com.soebes.multithreading.cp.supose.scan;
 
 import java.io.File;
-import java.net.URI;
+import java.net.URL;
 
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 
 public class RepositoryScanParameter {
 
     private ISVNAuthenticationManager authenticationManager;
-//    private Filtering filtering;
     
-    private URI uri;
+    private URL url;
     
     private File indexDirectory;
 
@@ -23,10 +22,10 @@ public class RepositoryScanParameter {
      * @param indexDirectory
      *            The directory of the index which will be created.
      */
-    public RepositoryScanParameter(ISVNAuthenticationManager authenticationManager, URI uri, File indexDirectory) {
+    public RepositoryScanParameter(ISVNAuthenticationManager authenticationManager, URL url, File indexDirectory) {
         super();
         this.authenticationManager = authenticationManager;
-        this.uri = uri;
+        this.url = url;
         this.indexDirectory = indexDirectory;
     }
 
@@ -38,12 +37,12 @@ public class RepositoryScanParameter {
         this.authenticationManager = authenticationManager;
     }
 
-    public URI getUri() {
-        return uri;
+    public URL getUrl() {
+        return url;
     }
 
-    public void setUri(URI uri) {
-        this.uri = uri;
+    public void setUrl(URL url) {
+        this.url = url;
     }
 
     public File getIndexDirectory() {
