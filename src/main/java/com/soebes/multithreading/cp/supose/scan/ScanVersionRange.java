@@ -19,7 +19,7 @@ public class ScanVersionRange implements Callable<Index>{
 
     public ScanVersionRange(RepositoryScanParameter repositoryScanParamter, RevisionRange revisionRange) {
         super();
-        this.repository = new Repository(repositoryScanParamter.getUrl(), repositoryScanParamter.getAuthenticationManager());
+        this.repository = new Repository(repositoryScanParamter.getUri(), repositoryScanParamter.getAuthenticationManager());
         this.revisionRange = revisionRange;
         this.repositoryScanParameter = repositoryScanParamter;
         LOGGER.info("ScanVersionRange (" + getRevisionRange().getFrom() + ", " + getRevisionRange().getTo() + ")");

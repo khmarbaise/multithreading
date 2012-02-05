@@ -62,10 +62,10 @@ public class ReadLogEntries {
                         }
                     });
         } catch (SVNAuthenticationException svnae) {
-            LOGGER.error("Authentication has failed. '" + getRepository().getUrl() + "'", svnae);
+            LOGGER.error("Authentication has failed. '" + getRepository().getUri() + "'", svnae);
             throw svnae;
         } catch (SVNException svne) {
-            LOGGER.error("error while collecting log information for '" + getRepository().getUrl() + "'", svne);
+            LOGGER.error("error while collecting log information for '" + getRepository().getUri() + "'", svne);
             throw svne;
         } finally {
 //            LogEntryStop();

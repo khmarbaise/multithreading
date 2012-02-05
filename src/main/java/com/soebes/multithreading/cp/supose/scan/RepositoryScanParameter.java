@@ -1,7 +1,7 @@
 package com.soebes.multithreading.cp.supose.scan;
 
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
 
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 
@@ -9,23 +9,23 @@ public class RepositoryScanParameter {
 
     private ISVNAuthenticationManager authenticationManager;
     
-    private URL url;
+    private URI uri;
     
     private File indexDirectory;
 
     /**
      * @param authenticationManager The authentication manager which is used to authenticate.
-     * @param url
-     *            The access URL to the repository either <code>file:///</code>, <code>http://</code>,
+     * @param uri
+     *            The access URI to the repository either <code>file:///</code>, <code>http://</code>,
      *            <code>https://</code> or <code>svn://</code>.
      * 
      * @param indexDirectory
      *            The directory of the index which will be created.
      */
-    public RepositoryScanParameter(ISVNAuthenticationManager authenticationManager, URL url, File indexDirectory) {
+    public RepositoryScanParameter(ISVNAuthenticationManager authenticationManager, URI uri, File indexDirectory) {
         super();
         this.authenticationManager = authenticationManager;
-        this.url = url;
+        this.uri = uri;
         this.indexDirectory = indexDirectory;
     }
 
@@ -37,14 +37,6 @@ public class RepositoryScanParameter {
         this.authenticationManager = authenticationManager;
     }
 
-    public URL getUrl() {
-        return url;
-    }
-
-    public void setUrl(URL url) {
-        this.url = url;
-    }
-
     public File getIndexDirectory() {
         return indexDirectory;
     }
@@ -52,4 +44,12 @@ public class RepositoryScanParameter {
     public void setIndexDirectory(File indexDirectory) {
         this.indexDirectory = indexDirectory;
     }
+
+	public URI getUri() {
+		return uri;
+	}
+
+	public void setUri(URI uri) {
+		this.uri = uri;
+	}
 }

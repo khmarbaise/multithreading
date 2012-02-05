@@ -24,7 +24,7 @@
  */
 package com.soebes.multithreading.cp.supose.scan;
 
-import java.net.URL;
+import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.tmatesoft.svn.core.SVNException;
@@ -43,7 +43,7 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 public class Repository {
     private static Logger LOGGER = Logger.getLogger(Repository.class);
 
-    private URL url = null;
+    private URI uri = null;
     private SVNRepository repository = null;
     private ISVNAuthenticationManager authManager = null;
 
@@ -52,14 +52,14 @@ public class Repository {
     /**
      * This will initialize the SVNKit library.
      *
-     * @param url
-     *            The url of the repository we would like to do a connection to.
+     * @param uri
+     *            The URI of the repository we would like to do a connection to.
      * @param authManager
      *            This will define the Authentication manager which is used.
      * @see ISVNAuthenticationManager
      */
-    public Repository(URL url, ISVNAuthenticationManager authManager) {
-        setUrl(url);
+    public Repository(URI uri, ISVNAuthenticationManager authManager) {
+        setUri(uri);
         setAuthenticationManager(authManager);
 
         /*
@@ -116,13 +116,13 @@ public class Repository {
              * repository location used to create this SVNRepository. SVNURL is
              * a wrapper for URL strings that refer to repository locations.
              */
-            repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(getUrl().toString()));
+            repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(getUri().toString()));
         } catch (SVNException svne) {
             // This can only happen if we use a protocol which is not
             // registered.
             // Missing initialization of the library.
             LOGGER.error("Error while creationg SVNRepository for location '"
-                    + getUrl() + "' ", svne);
+                    + getUri() + "' ", svne);
         }
     }
 
@@ -138,14 +138,6 @@ public class Repository {
 
     public void setAuthenticationManager(ISVNAuthenticationManager authManager) {
         this.authManager = authManager;
-    }
-
-    public URL getUrl() {
-        return url;
-    }
-
-    public void setUrl(URL url) {
-        this.url = url;
     }
 
     public SVNRepository getRepository() {
@@ -167,5 +159,13 @@ public class Repository {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
+
+	public URI getUri() {
+		return uri;
+	}
+
+	public void setUri(URI uri) {
+		this.uri = uri;
+	}
 
 }
