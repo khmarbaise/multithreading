@@ -15,8 +15,8 @@ public class RepositoryScanParameter {
 
     /**
      * @param authenticationManager The authentication manager which is used to authenticate.
-     * @param uri
-     *            The access URI to the repository either <code>file:///</code>, <code>http://</code>,
+     * @param url
+     *            The access URL to the repository either <code>file:///</code>, <code>http://</code>,
      *            <code>https://</code> or <code>svn://</code>.
      * 
      * @param indexDirectory
