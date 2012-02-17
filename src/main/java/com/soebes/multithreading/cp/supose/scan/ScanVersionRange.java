@@ -48,6 +48,7 @@ public class ScanVersionRange implements Callable<Index>{
         VersionRange versionRange = readLogs.getVersionRange();
 
         Index index = new Index(getIndexFolderName(), getRepositoryScanParameter().getIndexDirectory());
+        index.createIndex ( );
 
 //        Analyzer analyzer = AnalyzerFactory.createInstance();
 //        index.setAnalyzer(analyzer);

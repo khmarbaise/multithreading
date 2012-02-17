@@ -58,7 +58,6 @@ public class ReadLogEntries {
                                 LOGGER.info("Scanned 100 revisions.");
                             }
                             getVersionRange().add(new Version(logEntry));
-//                            logEntries.add(logEntry);
                         }
                     });
         } catch (SVNAuthenticationException svnae) {

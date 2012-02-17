@@ -14,8 +14,8 @@ public class ScanRepositoryTest {
     public void firstTest() throws MalformedURLException {
         ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager();
 
-        URI repositoryURI = URI.create("file:///home/kama/test-supose/testrepos/");
-        File indexDirectory = new File("/home/kama/test-supose/test-index");
+        URI repositoryURI = URI.create("file:///home/kama/test-supose/bass/");
+        File indexDirectory = new File("/home/kama/test-supose/test-index-bass");
         RepositoryScanParameter parameter = new RepositoryScanParameter(authManager, repositoryURI, indexDirectory);
         
         IScanBehaviour scan = new ScanRepositoryStrategy();

@@ -60,7 +60,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         RevisionRange rRange = new RevisionRange(1, latestRevision);
         
         //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)
-        List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(300);
+        List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(600);
 
         for (RevisionRange revisionRange : revisionRanges) {
 
