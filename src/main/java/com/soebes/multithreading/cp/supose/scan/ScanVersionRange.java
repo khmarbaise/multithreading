@@ -1,9 +1,11 @@
 package com.soebes.multithreading.cp.supose.scan;
 
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.CorruptIndexException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import com.soebes.multithreading.cp.Index;
@@ -64,10 +66,7 @@ public class ScanVersionRange implements Callable<Index>{
                         LOGGER.info("Indexing revision:" + svnLogEntry.getRevision());
                     }
                     indexedRevisions ++;
-                    RevisionDocument rd = new RevisionDocument();
-                    rd.addTokenizedField(FieldNames.REVISION, Long.toString(svnLogEntry.getRevision()));
-//                    workOnChangeSet(writer, logEntry);
-                    index.getIndexWriter().addDocument(rd.getDoc());
+                    scanChangeSet(index, svnLogEntry);
                 } catch (Exception e) {
                     LOGGER.error("Error during workOnChangeSet() ", e);
                 } finally {
@@ -82,6 +81,15 @@ public class ScanVersionRange implements Callable<Index>{
         
         index.getIndexWriter().close();
         return index;
+    }
+
+    private void scanChangeSet(Index index, SVNLogEntry svnLogEntry)
+	    throws CorruptIndexException, IOException {
+	RevisionDocument rd = new RevisionDocument();
+	rd.addTokenizedField(FieldNames.REVISION, Long.toString(svnLogEntry.getRevision()));
+	rd.addTokenizedField(FieldNames.MESSAGE, svnLogEntry.getMessage());
+	rd.addTokenizedField(FieldNames.AUTHOR, svnLogEntry.getAuthor());
+	index.getIndexWriter().addDocument(rd.getDoc());
     }
 
     public Repository getRepository() {

@@ -15,7 +15,7 @@ public class ScanRepositoryTest {
         ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager();
 
         URI repositoryURI = URI.create("file:///home/kama/test-supose/bass/");
-        File indexDirectory = new File("/home/kama/test-supose/test-index-bass");
+        File indexDirectory = new File("/home/kama/test-supose/test-index-bass/test");
         RepositoryScanParameter parameter = new RepositoryScanParameter(authManager, repositoryURI, indexDirectory);
         
         IScanBehaviour scan = new ScanRepositoryStrategy();
