@@ -94,10 +94,12 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
             }
 
         }
-
         LOGGER.info("All indexers have been ended.");
-        
+
+        LOGGER.info("Merging all indexes together.");
+        IndexHelper.mergeIndex(parameter.getIndexDirectory(), resultList);
         //Merge generated indexes into a single one (new) or an existing index.
+        LOGGER.info("Merging all indexes together finished.");
 
     }
 

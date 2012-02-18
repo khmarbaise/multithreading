@@ -34,6 +34,15 @@ public class Index {
         this.analyzer = analyzer;
     }
 
+    public String toString() {
+	StringBuilder result = new StringBuilder();
+	result.append("Name:" + getName() + " index-folder:" + getIndexFolder() + " index-base-folder:" + getIndexBaseFolder());
+	return result.toString();
+    }
+    /**
+     * FIXME: Should be in the ctor ? Better?
+     * @throws IOException
+     */
     public void createIndex() throws IOException {
         createIndexFolder ( );
 //        Directory d = Directory.
@@ -87,6 +96,14 @@ public class Index {
     public void setIndexWriter ( IndexWriter indexWriter )
     {
         this.indexWriter = indexWriter;
+    }
+
+    public File getIndexFolder() {
+        return indexFolder;
+    }
+
+    public void setIndexFolder(File indexFolder) {
+        this.indexFolder = indexFolder;
     }
 
 }
