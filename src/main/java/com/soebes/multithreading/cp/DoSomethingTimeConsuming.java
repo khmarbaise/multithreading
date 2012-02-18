@@ -41,28 +41,29 @@ public class DoSomethingTimeConsuming implements Callable<Index> {
 
     /** {@inheritDoc} */
     public Index call() throws Exception {
-        Index i = new Index("XYZ", new File("test"));
-        Random r = new Random(new Date().getTime());
-        int value = r.nextInt(100); // 0..99
-        Version first = versionRange.getFirstVersion();
-        Version last = versionRange.getLastVersion();
-        i.setName(
-            "number: " + number
-            + " first:" + first.getVersion()
-            + " last:" + last.getVersion()
-            + " random:" + Integer.toString(value));
-        LOGGER.info("Started computation[" + number + "]: first:" + first
-                + " last:" + last + " random: " + Integer.toString(value));
-
-        // Really produce some kind of work for the CPU
-//        waitMilliSeconds(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
-         Thread.sleep(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
-
-        i.setName("S-" + first.getVersion() + "-" + last.getVersion());
-        LOGGER.info("Ended computation[" + number + "]: first:" + first.getVersion()
-                + " last:" + last.getVersion() + " random: " + Integer.toString(value));
-
-        return i;
+//        Index i = new Index("XYZ", new File("test"));
+//        Random r = new Random(new Date().getTime());
+//        int value = r.nextInt(100); // 0..99
+//        Version first = versionRange.getFirstVersion();
+//        Version last = versionRange.getLastVersion();
+//        i.setName(
+//            "number: " + number
+//            + " first:" + first.getVersion()
+//            + " last:" + last.getVersion()
+//            + " random:" + Integer.toString(value));
+//        LOGGER.info("Started computation[" + number + "]: first:" + first
+//                + " last:" + last + " random: " + Integer.toString(value));
+//
+//        // Really produce some kind of work for the CPU
+////        waitMilliSeconds(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
+//         Thread.sleep(value * 50 + MIN_WAITING_IN_MILLI_SECONDS); // 200 ms
+//
+//        i.setName("S-" + first.getVersion() + "-" + last.getVersion());
+//        LOGGER.info("Ended computation[" + number + "]: first:" + first.getVersion()
+//                + " last:" + last.getVersion() + " random: " + Integer.toString(value));
+//
+//        return i;
+	return null;
     }
 
 }

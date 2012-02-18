@@ -52,9 +52,9 @@ public class IndexMerger implements Callable<Index> {
             LOGGER.info("Merge index " + index.getName() + " into " + destinationIndex.getName());
             waitMilliSeconds(2000 + 2000 * value);
         }
-        Index result = new Index("test", new File("xx"));
-        result.setName(destinationIndex.getName());
-        return result;
+//        Index result = new Index("test", new File("xx"));
+//        result.setName(destinationIndex.getName());
+        return null;
     }
 
 }

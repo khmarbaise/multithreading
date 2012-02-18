@@ -1,8 +1,14 @@
 package com.soebes.multithreading.cp;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 /**
  * @author Karl Heinz Marbaise
@@ -11,18 +17,35 @@ public class Index {
     private static final Logger LOGGER = Logger.getLogger(Index.class);
 
     private File indexBaseFolder;
+    
+    private File indexFolder;
 
     private String name;
+    
+    private Analyzer analyzer;
+    
+    private IndexWriter indexWriter;
 
-    public Index(String name, File indexBaseFolder) {
+    public Index(String name, File indexBaseFolder, Analyzer analyzer) {
         super();
         this.indexBaseFolder = indexBaseFolder;
+        this.indexFolder = null;
         this.name = name;
+        this.analyzer = analyzer;
     }
 
-    public void createIndex() {
+    public void createIndex() throws IOException {
+        createIndexFolder ( );
+//        Directory d = Directory.
+        IndexWriterConfig conf = new IndexWriterConfig ( Version.LUCENE_35, getAnalyzer() );
+        FSDirectory fs = FSDirectory.open ( this.indexFolder );
+
+        indexWriter = new IndexWriter(fs, conf);
+    }
+
+    private void createIndexFolder() {
         //Create the index as a sibling to the indexBaseFolder.
-        File indexFolder = new File(indexBaseFolder.getParentFile(), getName());
+        indexFolder = new File(indexBaseFolder.getParentFile(), getName());
         try {
             indexFolder.mkdirs();
         } catch (Exception e) {
@@ -44,6 +67,26 @@ public class Index {
 
     public void setIndexBaseFolder(File indexBaseFolder) {
         this.indexBaseFolder = indexBaseFolder;
+    }
+
+    public Analyzer getAnalyzer ()
+    {
+        return analyzer;
+    }
+
+    public void setAnalyzer ( Analyzer analyzer )
+    {
+        this.analyzer = analyzer;
+    }
+
+    public IndexWriter getIndexWriter ()
+    {
+        return indexWriter;
+    }
+
+    public void setIndexWriter ( IndexWriter indexWriter )
+    {
+        this.indexWriter = indexWriter;
     }
 
 }

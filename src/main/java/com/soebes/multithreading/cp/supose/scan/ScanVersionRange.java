@@ -3,6 +3,7 @@ package com.soebes.multithreading.cp.supose.scan;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
 import org.tmatesoft.svn.core.SVNLogEntry;
 
 import com.soebes.multithreading.cp.Index;
@@ -47,15 +48,11 @@ public class ScanVersionRange implements Callable<Index>{
 
         VersionRange versionRange = readLogs.getVersionRange();
 
-        Index index = new Index(getIndexFolderName(), getRepositoryScanParameter().getIndexDirectory());
+        Analyzer analyzer = AnalyzerFactory.createInstance();
+
+        Index index = new Index(getIndexFolderName(), getRepositoryScanParameter().getIndexDirectory(), analyzer);
         index.createIndex ( );
 
-//        Analyzer analyzer = AnalyzerFactory.createInstance();
-//        index.setAnalyzer(analyzer);
-//
-//        index.setCreate(create);
-//        IndexWriter indexWriter = index.createIndexWriter(indexDirectory);
-        
         long indexedRevisions = 1;
         
         for (Version version : versionRange.getVersionRange()) {
@@ -67,7 +64,10 @@ public class ScanVersionRange implements Callable<Index>{
                         LOGGER.info("Indexing revision:" + svnLogEntry.getRevision());
                     }
                     indexedRevisions ++;
+                    RevisionDocument rd = new RevisionDocument();
+                    rd.addTokenizedField(FieldNames.REVISION, Long.toString(svnLogEntry.getRevision()));
 //                    workOnChangeSet(writer, logEntry);
+                    index.getIndexWriter().addDocument(rd.getDoc());
                 } catch (Exception e) {
                     LOGGER.error("Error during workOnChangeSet() ", e);
                 } finally {
@@ -80,9 +80,7 @@ public class ScanVersionRange implements Callable<Index>{
 
         }
         
-//        index.optimize();
-//        index.close();
-
+        index.getIndexWriter().close();
         return index;
     }
 

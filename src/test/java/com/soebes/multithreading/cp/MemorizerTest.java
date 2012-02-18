@@ -96,10 +96,10 @@ public class MemorizerTest {
                 for (Index index : indexerTasks) {
                     s += "#" + index.getName();
                 }
-                Index dest = new Index("Name", new File("test"));
-                dest.setName("D-" + s);
-                IndexMerger indexMerge = new IndexMerger(dest, indexerTasks);
-                execCompletion.submit(indexMerge);
+//                Index dest = new Index("Name", new File("test"));
+//                dest.setName("D-" + s);
+//                IndexMerger indexMerge = new IndexMerger(dest, indexerTasks);
+//                execCompletion.submit(indexMerge);
                 indexerTasks = new ArrayList<Index>();
             }
         }
