@@ -1,5 +1,6 @@
 package com.soebes.multithreading.cp.supose.scan;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -8,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -100,6 +102,16 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         IndexHelper.mergeIndex(parameter.getIndexDirectory(), resultList);
         //Merge generated indexes into a single one (new) or an existing index.
         LOGGER.info("Merging all indexes together finished.");
+        
+        //Delete the merged indexes...
+        for (Index item : resultList) {
+            // item.getIndexFolder()
+            try {
+		FileUtils.deleteDirectory(item.getIndexFolder());
+	    } catch (IOException e) {
+		LOGGER.error("IOException during deletion of " + item.getIndexFolder(), e);
+	    }
+        }
 
     }
 

@@ -9,6 +9,7 @@ package com.soebes.multithreading.cp.supose.scan;
  * multi-threading approaches.
  * 
  * @author Karl Heinz Marbaise
+ * @since 0.8.0
  *
  */
 public interface IScanBehaviour {

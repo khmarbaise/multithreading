@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.FSDirectory;
 
 import com.soebes.multithreading.cp.Index;
@@ -73,7 +74,7 @@ public class IndexHelper {
 
         try {
             // We assume an existing index...
-            Index index = new Index("result-index", destination, AnalyzerFactory.createInstance());
+            Index index = new Index("result-index", destination, AnalyzerFactory.createInstance(), false);
             //FIXME: Should be done different?
             index.createIndex();
             LOGGER.info("Merging of indexes started.");
@@ -87,6 +88,7 @@ public class IndexHelper {
         	LOGGER.info("Index:" + item.toString());
 	    }
 
+//            index.getIndexWriter().getConfig().setOpenMode(OpenMode.APPEND);
             index.getIndexWriter().addIndexes(fsDirs);
             index.getIndexWriter().forceMerge(1, true);
             index.getIndexWriter().close(true);

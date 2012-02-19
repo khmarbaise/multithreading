@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
@@ -25,6 +26,8 @@ public class Index {
     private Analyzer analyzer;
     
     private IndexWriter indexWriter;
+    
+    private boolean create;
 
     public Index(String name, File indexBaseFolder, Analyzer analyzer) {
         super();
@@ -32,6 +35,12 @@ public class Index {
         this.indexFolder = null;
         this.name = name;
         this.analyzer = analyzer;
+        this.create = true;
+    }
+
+    public Index(String name, File indexBaseFolder, Analyzer analyzer, boolean create) {
+	this(name, indexBaseFolder, analyzer);
+	this.create = create;
     }
 
     public String toString() {
@@ -47,6 +56,11 @@ public class Index {
         createIndexFolder ( );
 //        Directory d = Directory.
         IndexWriterConfig conf = new IndexWriterConfig ( Version.LUCENE_35, getAnalyzer() );
+        if (create) {
+            conf.setOpenMode(OpenMode.CREATE);
+        } else {
+            conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
+        }
         FSDirectory fs = FSDirectory.open ( this.indexFolder );
 
         indexWriter = new IndexWriter(fs, conf);
