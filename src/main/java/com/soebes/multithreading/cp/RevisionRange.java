@@ -3,11 +3,19 @@ package com.soebes.multithreading.cp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.tmatesoft.svn.core.wc.SVNRevision;
+
 public class RevisionRange {
+
+    /**
+     * Constant for the whole repository.
+     */
+    public static final RevisionRange ALL = new RevisionRange(1, SVNRevision.HEAD.getNumber());
 
     private long from;
     private long to;
-    
+
+
     public RevisionRange(long from, long to) {
         super();
         this.from = from;
@@ -45,6 +53,5 @@ public class RevisionRange {
         this.to = to;
     }
     
-    
-    
+
 }

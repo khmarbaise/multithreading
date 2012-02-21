@@ -5,9 +5,12 @@ import org.tmatesoft.svn.core.SVNLogEntry;
 public class Version {
 
     public final static Version UNDEFINED = new Version();
+    public final static Version LAST = new Version("LAST");
+    public final static Version FIRST = new Version("FIRST");
 
     private String version;
     
+    //FIXME: This is wrong, cause it's coupled to Subversion but must be independant!
     private SVNLogEntry logEntry;
     
     private Version() {
@@ -42,6 +45,22 @@ public class Version {
         } else {
             return false;
         }
+    }
+    
+    public boolean isFIRST() {
+	if (FIRST.equals(this)) {
+	    return true;
+	} else {
+	    return false;
+	}
+    }
+
+    public boolean isLAST() {
+	if (LAST.equals(this)) {
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
     public SVNLogEntry getLogEntry() {

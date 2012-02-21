@@ -5,6 +5,8 @@ import java.net.URI;
 
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 
+import com.soebes.multithreading.cp.RevisionRange;
+
 public class RepositoryScanParameter {
 
     private ISVNAuthenticationManager authenticationManager;
@@ -12,6 +14,9 @@ public class RepositoryScanParameter {
     private URI uri;
     
     private File indexDirectory;
+    
+    private RevisionRange revisionRange;
+
 
     /**
      * @param authenticationManager The authentication manager which is used to authenticate.
@@ -22,11 +27,16 @@ public class RepositoryScanParameter {
      * @param indexDirectory
      *            The directory of the index which will be created.
      */
-    public RepositoryScanParameter(ISVNAuthenticationManager authenticationManager, URI uri, File indexDirectory) {
+    public RepositoryScanParameter(ISVNAuthenticationManager authenticationManager, URI uri, File indexDirectory, RevisionRange revisionRange) {
         super();
         this.authenticationManager = authenticationManager;
         this.uri = uri;
         this.indexDirectory = indexDirectory;
+        this.revisionRange = revisionRange;
+    }
+
+    public RepositoryScanParameter(ISVNAuthenticationManager authenticationManager, URI uri, File indexDirectory) {
+	this(authenticationManager, uri, indexDirectory,RevisionRange.ALL);
     }
 
     public ISVNAuthenticationManager getAuthenticationManager() {
@@ -51,5 +61,13 @@ public class RepositoryScanParameter {
 
 	public void setUri(URI uri) {
 		this.uri = uri;
+	}
+
+	public RevisionRange getRevisionRange() {
+	    return revisionRange;
+	}
+
+	public void setRevisionRange(RevisionRange revisionRange) {
+	    this.revisionRange = revisionRange;
 	}
 }

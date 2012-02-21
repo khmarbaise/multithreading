@@ -50,16 +50,25 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         Repository repository = new Repository(parameter.getUri(), parameter.getAuthenticationManager());
 
         long latestRevision;
-        try {
-            latestRevision = repository.getRepository().getLatestRevision();
-        } catch (SVNException e1) {
-            LOGGER.error("Problem during getting the latest revision.", e1);
-            return;
+        long firstRevision = parameter.getRevisionRange().getFrom();
+
+        if (parameter.getRevisionRange().equals(RevisionRange.ALL)) {
+            try {
+        	latestRevision = repository.getRepository().getLatestRevision();
+            } catch (SVNException e1) {
+        	LOGGER.error("Problem during getting the latest revision.", e1);
+        	return;
+            }
+        } else {
+            latestRevision = parameter.getRevisionRange().getTo();
         }
 
-        LOGGER.info("We need to read a repository from 1.." + latestRevision);
+        LOGGER.info("We need to read a repository from "+ firstRevision + ".." + latestRevision);
 
-        RevisionRange rRange = new RevisionRange(1, latestRevision);
+//        parameter.getRevisionRange().getFrom(),
+//        parameter.getRevisionRange().getTo(),
+        
+        RevisionRange rRange = new RevisionRange(firstRevision, latestRevision);
         
         //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)
         List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(600);

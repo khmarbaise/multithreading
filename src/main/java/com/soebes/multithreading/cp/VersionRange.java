@@ -16,6 +16,11 @@ public class VersionRange {
 
     private final List<Version> versionRange;
 
+//    public static final List<Version> FIRST_LAST = new ArrayList()<Version>() { new Version(), new Version() };
+//    private final List<Version> wholeRepository = new ArrayList<Version>(){ new Version() };
+    
+//    public static final VersionRange WHOLE_REPOSITORY = new VersionRange(new ArrayList<Version>()( new Version(), new Version()));
+
     public VersionRange() {
         this.versionRange = new ArrayList<Version>();
     }

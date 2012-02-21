@@ -8,6 +8,8 @@ import org.testng.annotations.Test;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
+import com.soebes.multithreading.cp.RevisionRange;
+
 public class ScanRepositoryTest {
 
     @Test
@@ -16,7 +18,10 @@ public class ScanRepositoryTest {
 
         URI repositoryURI = URI.create("file:///home/kama/test-supose/bass/");
         File indexDirectory = new File("/home/kama/test-supose/test-index-bass/test");
-        RepositoryScanParameter parameter = new RepositoryScanParameter(authManager, repositoryURI, indexDirectory);
+//        vr.add(Version.FIRST);
+//        vr.add(Version.LAST);
+
+        RepositoryScanParameter parameter = new RepositoryScanParameter(authManager, repositoryURI, indexDirectory, RevisionRange.ALL);
         
         IScanBehaviour scan = new ScanRepositoryStrategy();
         scan.scanRepository(parameter);
