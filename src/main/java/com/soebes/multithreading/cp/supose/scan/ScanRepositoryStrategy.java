@@ -65,9 +65,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
 
         LOGGER.info("We need to read a repository from "+ firstRevision + ".." + latestRevision);
 
-//        parameter.getRevisionRange().getFrom(),
-//        parameter.getRevisionRange().getTo(),
-        
+        //FIXME: The following will only work if we have an SVN repository which has long as revision numbers.
         RevisionRange rRange = new RevisionRange(firstRevision, latestRevision);
         
         //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)
