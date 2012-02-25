@@ -41,7 +41,8 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
     @Override
     public void scanRepository(RepositoryScanParameter parameter) {
 
-        int numberOfThreads = calculateNumberOfThreads(0.9, 1, 1);
+//        int numberOfThreads = calculateNumberOfThreads(0.9, 1, 1);
+        int numberOfThreads = 5;
 
         ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
 
@@ -69,7 +70,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         RevisionRange rRange = new RevisionRange(firstRevision, latestRevision);
         
         //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)
-        List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(600);
+        List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(5000);
 
         for (RevisionRange revisionRange : revisionRanges) {
 
@@ -101,15 +102,15 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
             } catch (ExecutionException e) {
                 LOGGER.error("ExectionException::", e);
             }
-
         }
+
         LOGGER.info("All indexers have been ended.");
 
         LOGGER.info("Merging all indexes together.");
         IndexHelper.mergeIndex(parameter.getIndexDirectory(), resultList);
         //Merge generated indexes into a single one (new) or an existing index.
         LOGGER.info("Merging all indexes together finished.");
-        
+
         //Delete the merged indexes...
         for (Index item : resultList) {
             // item.getIndexFolder()

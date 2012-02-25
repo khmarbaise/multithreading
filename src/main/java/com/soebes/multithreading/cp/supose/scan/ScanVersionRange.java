@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.CorruptIndexException;
 import org.tmatesoft.svn.core.SVNLogEntry;
+import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import com.soebes.multithreading.cp.Index;
 import com.soebes.multithreading.cp.RevisionRange;
@@ -22,7 +23,8 @@ public class ScanVersionRange implements Callable<Index>{
 
     public ScanVersionRange(RepositoryScanParameter repositoryScanParamter, RevisionRange revisionRange) {
         super();
-        this.repository = new Repository(repositoryScanParamter.getUri(), repositoryScanParamter.getAuthenticationManager());
+        
+        this.repository = new Repository(repositoryScanParamter.getUri(), SVNWCUtil.createDefaultAuthenticationManager());
         this.revisionRange = revisionRange;
         this.repositoryScanParameter = repositoryScanParamter;
         LOGGER.info("ScanVersionRange (" + getRevisionRange().getFrom() + ", " + getRevisionRange().getTo() + ")");
@@ -50,6 +52,7 @@ public class ScanVersionRange implements Callable<Index>{
 
         VersionRange versionRange = readLogs.getVersionRange();
 
+        //FIXME: Should be made by guice (DI) instead.
         Analyzer analyzer = AnalyzerFactory.createInstance();
 
         Index index = new Index(getIndexFolderName(), getRepositoryScanParameter().getIndexDirectory(), analyzer);
@@ -87,8 +90,8 @@ public class ScanVersionRange implements Callable<Index>{
 	    throws CorruptIndexException, IOException {
 	RevisionDocument rd = new RevisionDocument();
 	rd.addTokenizedField(FieldNames.REVISION, Long.toString(svnLogEntry.getRevision()));
-	rd.addTokenizedField(FieldNames.MESSAGE, svnLogEntry.getMessage());
-	rd.addTokenizedField(FieldNames.AUTHOR, svnLogEntry.getAuthor());
+	rd.addTokenizedField(FieldNames.MESSAGE, svnLogEntry.getMessage() == null ? "" : svnLogEntry.getMessage());
+	rd.addTokenizedField(FieldNames.AUTHOR, svnLogEntry.getAuthor() == null ? "" : svnLogEntry.getAuthor());
 	index.getIndexWriter().addDocument(rd.getDoc());
     }
 

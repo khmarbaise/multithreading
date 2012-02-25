@@ -1,7 +1,6 @@
 package com.soebes.multithreading.cp.supose.scan;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -13,7 +12,6 @@ import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
-import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 import org.tmatesoft.svn.core.wc.admin.SVNAdminClient;
 
@@ -34,8 +32,10 @@ public class ScanRepositoryTest extends TestBase {
         //Create the path to the repos.dump file which is located
         //in the src/test/resources directory.
         SVNAdminClient admin = new SVNAdminClient((ISVNAuthenticationManager)null, null);
-        
+
 //        SVNClientManager client = SVNClientManager.newInstance();
+        
+
 //        client.
     }
 
@@ -44,10 +44,11 @@ public class ScanRepositoryTest extends TestBase {
     public void firstTest() throws MalformedURLException {
         ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager();
 
-        URI repositoryURI = URI.create("file:///home/kama/test-supose/bass/");
+        URI repositoryURI = URI.create("file:///home/kama/test-supose/asf/");
         File indexDirectory = new File("/home/kama/test-supose/test-index-bass/test");
 
-        RevisionRange range = new RevisionRange(1, 50);
+//        RevisionRange range = new RevisionRange(1, 50);
+        RevisionRange range = RevisionRange.ALL;
         RepositoryScanParameter parameter = new RepositoryScanParameter(authManager, repositoryURI, indexDirectory, range);
         
         IScanBehaviour scan = new ScanRepositoryStrategy();

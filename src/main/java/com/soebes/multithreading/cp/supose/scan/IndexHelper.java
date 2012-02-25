@@ -26,11 +26,9 @@ package com.soebes.multithreading.cp.supose.scan;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.FSDirectory;
 
 import com.soebes.multithreading.cp.Index;
@@ -50,11 +48,11 @@ public class IndexHelper {
      * @param source
      *            The index which will be merged to the destination index.
      */
-    public static void mergeIndex(File destination, File source) {
-        ArrayList<File> sourceList = new ArrayList<File>();
-        sourceList.add(source);
-//        mergeIndex(destination, sourceList);
-    }
+//    public static void mergeIndex(File destination, File source) {
+//        ArrayList<File> sourceList = new ArrayList<File>();
+//        sourceList.add(source);
+////        mergeIndex(destination, sourceList);
+//    }
 
     /**
      * Merge all given indexes together to a single index.
