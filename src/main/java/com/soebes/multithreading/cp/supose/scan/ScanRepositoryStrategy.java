@@ -3,11 +3,13 @@ package com.soebes.multithreading.cp.supose.scan;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -42,9 +44,17 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
     public void scanRepository(RepositoryScanParameter parameter) {
 
 //        int numberOfThreads = calculateNumberOfThreads(0.9, 1, 1);
-        int numberOfThreads = 5;
+        int numberOfThreads = 6;
 
-        ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
+        ExecutorService exec =  new ThreadPoolExecutor(numberOfThreads, 
+        	numberOfThreads, 
+        	0L, 
+        	TimeUnit.MILLISECONDS, 
+        	new ArrayBlockingQueue<Runnable>(600)
+        );
+
+//        ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
+//        ExecutorService exec = Executors.newCachedThreadPool();
 
         ExecutorCompletionService<Index> execCompletion = new ExecutorCompletionService<Index>(exec);
 
@@ -70,7 +80,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         RevisionRange rRange = new RevisionRange(firstRevision, latestRevision);
         
         //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)
-        List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(5000);
+        List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(200);
 
         for (RevisionRange revisionRange : revisionRanges) {
 
@@ -90,6 +100,11 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
             if (result == null) {
                 // LOGGER.info("No task has stopped.");
                 // Nothing stopped yet.
+        	try {
+		    Thread.sleep(1000);
+		} catch (InterruptedException e) {
+		    //Intentially left blank.
+		}
                 continue;
             }
 
@@ -115,6 +130,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         for (Index item : resultList) {
             // item.getIndexFolder()
             try {
+                LOGGER.info("Deleting " + item.getName ( ));
 		FileUtils.deleteDirectory(item.getIndexFolder());
 	    } catch (IOException e) {
 		LOGGER.error("IOException during deletion of " + item.getIndexFolder(), e);
