@@ -44,7 +44,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
     public void scanRepository(RepositoryScanParameter parameter) {
 
 //        int numberOfThreads = calculateNumberOfThreads(0.9, 1, 1);
-        int numberOfThreads = 6;
+        int numberOfThreads = 3 * Runtime.getRuntime ( ).availableProcessors ( );
 
         ExecutorService exec =  new ThreadPoolExecutor(numberOfThreads, 
         	numberOfThreads, 
