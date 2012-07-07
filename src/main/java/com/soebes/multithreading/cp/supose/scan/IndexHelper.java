@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.FSDirectory;
 
 import com.soebes.multithreading.cp.Index;
@@ -63,16 +64,17 @@ public class IndexHelper {
      * @param indexList
      *            This is the list of indexes which are merged into the
      *            destination index.
+     * @throws CorruptIndexException 
      * @throws IOException 
      */
-    public static void mergeIndex(File destination, List<Index> indexList) {
+    public static void mergeIndex(File destination, List<Index> indexList) throws CorruptIndexException, IOException {
         LOGGER.debug("We are trying to merge indexes to the destination: "
                 + destination);
 
+        // We assume an existing index...
+        Index index = new Index("result-index", destination, AnalyzerFactory.createInstance(), false);
 
         try {
-            // We assume an existing index...
-            Index index = new Index("result-index", destination, AnalyzerFactory.createInstance(), false);
             //FIXME: Should be done different?
             index.createIndex();
             LOGGER.info("Merging of indexes started.");
@@ -86,12 +88,12 @@ public class IndexHelper {
         	LOGGER.info("Index:" + item.toString());
 	    }
 
-//            index.getIndexWriter().getConfig().setOpenMode(OpenMode.APPEND);
             index.getIndexWriter().addIndexes(fsDirs);
             index.getIndexWriter().forceMerge(1, true);
             index.getIndexWriter().close(true);
             LOGGER.info("Merging of indexes succesfull.");
         } catch (Exception e) {
+            index.getIndexWriter().close();
             LOGGER.error("Something wrong during merge of index: ", e);
         }
     }

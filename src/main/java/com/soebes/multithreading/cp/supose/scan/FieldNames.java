@@ -57,18 +57,15 @@ public enum FieldNames {
 
     private String value;
 
-    public String getValue ()
-    {
-        return this.value;
+    public String getValue() {
+	return this.value;
     }
 
-    private FieldNames ( String value )
-    {
-        this.value = value;
+    private FieldNames(String value) {
+	this.value = value;
     }
 
-    public String toString ()
-    {
-        return this.value;
+    public String toString() {
+	return this.value;
     }
 }

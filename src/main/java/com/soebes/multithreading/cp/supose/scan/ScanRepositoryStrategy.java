@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.apache.lucene.index.CorruptIndexException;
 import org.tmatesoft.svn.core.SVNException;
 
 import com.soebes.multithreading.cp.Index;
@@ -43,18 +44,15 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
     @Override
     public void scanRepository(RepositoryScanParameter parameter) {
 
-//        int numberOfThreads = calculateNumberOfThreads(0.9, 1, 1);
         int numberOfThreads = 3 * Runtime.getRuntime ( ).availableProcessors ( );
 
         ExecutorService exec =  new ThreadPoolExecutor(numberOfThreads, 
         	numberOfThreads, 
         	0L, 
         	TimeUnit.MILLISECONDS, 
+        	//FIXME: Check if this is the right approach?
         	new ArrayBlockingQueue<Runnable>(600)
         );
-
-//        ExecutorService exec = Executors.newFixedThreadPool(numberOfThreads);
-//        ExecutorService exec = Executors.newCachedThreadPool();
 
         ExecutorCompletionService<Index> execCompletion = new ExecutorCompletionService<Index>(exec);
 
@@ -122,7 +120,14 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         LOGGER.info("All indexers have been ended.");
 
         LOGGER.info("Merging all indexes together.");
-        IndexHelper.mergeIndex(parameter.getIndexDirectory(), resultList);
+        try {
+	    IndexHelper.mergeIndex(parameter.getIndexDirectory(), resultList);
+	} catch (CorruptIndexException e1) {
+	    //What to do?
+	} catch (IOException e1) {
+	    //What to do
+	}
+
         //Merge generated indexes into a single one (new) or an existing index.
         LOGGER.info("Merging all indexes together finished.");
 
