@@ -48,7 +48,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
 
         ExecutorService exec =  new ThreadPoolExecutor(numberOfThreads, 
         	numberOfThreads, 
-        	2000L, 
+        	200000L, 
         	TimeUnit.MILLISECONDS, 
         	//FIXME: Check if this is the right approach?
         	new ArrayBlockingQueue<Runnable>(600)
@@ -78,7 +78,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
         RevisionRange rRange = new RevisionRange(firstRevision, latestRevision);
         
         //FIXME: 300 is only a test value ? (should be made configurable...(property file or command line parameter!)
-        List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(200);
+        List<RevisionRange> revisionRanges = rRange.getRevisionRangeBySize(500);
 
         for (RevisionRange revisionRange : revisionRanges) {
 
