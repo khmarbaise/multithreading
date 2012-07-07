@@ -60,7 +60,7 @@ public class UtilizationTest {
 
     }
 
-    @Test
+    @Test(enabled = false)
     public void timingTest() {
         long start = System.currentTimeMillis();
 

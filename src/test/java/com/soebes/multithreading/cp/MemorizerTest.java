@@ -41,7 +41,7 @@ public class MemorizerTest {
         return threads;
     }
 
-    @Test
+    @Test(enabled = false)
     public void firstStart() throws InterruptedException, ExecutionException {
 
         int numberOfThreads = calculateNumberOfThreads(0.9, 1, 1);

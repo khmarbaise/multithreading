@@ -48,7 +48,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
 
         ExecutorService exec =  new ThreadPoolExecutor(numberOfThreads, 
         	numberOfThreads, 
-        	0L, 
+        	2000L, 
         	TimeUnit.MILLISECONDS, 
         	//FIXME: Check if this is the right approach?
         	new ArrayBlockingQueue<Runnable>(600)
