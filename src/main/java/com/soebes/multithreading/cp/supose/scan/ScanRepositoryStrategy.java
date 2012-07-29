@@ -99,7 +99,7 @@ public class ScanRepositoryStrategy implements IScanBehaviour {
                 // LOGGER.info("No task has stopped.");
                 // Nothing stopped yet.
         	try {
-		    Thread.sleep(1000);
+		    Thread.sleep(TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS));
 		} catch (InterruptedException e) {
 		    //Intentially left blank.
 		}
