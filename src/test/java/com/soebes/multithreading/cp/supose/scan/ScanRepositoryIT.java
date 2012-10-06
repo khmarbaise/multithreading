@@ -44,8 +44,12 @@ public class ScanRepositoryIT extends TestBase {
     public void firstTest() throws MalformedURLException {
         ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager();
 
-        URI repositoryURI = URI.create("file:///home/kama/test-supose/bass/");
-        File indexDirectory = new File("/home/kama/test-supose/test-index-bass/test");
+//        URI repositoryURI = URI.create("file:///home/kama/test-supose/bass/");
+        
+//        URI repositoryURI = URI.create("file:///home/hadoop/test-repos/bass/");
+        URI repositoryURI = URI.create("file:///home/apache/asfrepos/");
+        
+        File indexDirectory = new File("/home/apache/results/asfrepos/");
 
 //        RevisionRange range = new RevisionRange(1, 50);
         RevisionRange range = RevisionRange.ALL;
