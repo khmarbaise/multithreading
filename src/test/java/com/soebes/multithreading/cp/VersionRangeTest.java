@@ -1,7 +1,7 @@
 package com.soebes.multithreading.cp;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class VersionRangeTest {
     public void checkIfHasVersionIsFalseIfNoVersionHasBeenAdded() {
         VersionRange vr = new VersionRange();
 
-        assertFalse(vr.hasVersions());
+        assertThat( vr.hasVersions() ).isFalse();
     }
 
     @Test
@@ -24,9 +24,8 @@ public class VersionRangeTest {
             Version v = new Version(Integer.toString(i));
             vr.add(v);
         }
-
-        assertTrue(vr.hasVersions());
-        assertTrue(vr.size() == 10);
+        assertThat( vr.hasVersions() ).isTrue();
+        assertThat( vr.size()).isEqualTo( 10 );
 
     }
 

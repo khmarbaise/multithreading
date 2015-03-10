@@ -30,7 +30,7 @@ public class ScanRepositoryIT extends TestBase {
 
         LOGGER.info("Start loading the dump file into the repository.");
         //Create the path to the repos.dump file which is located
-        //in the src/test/resources directory.
+        //in the arc/test/resources directory.
         SVNAdminClient admin = new SVNAdminClient((ISVNAuthenticationManager)null, null);
 
 //        SVNClientManager client = SVNClientManager.newInstance();
@@ -47,9 +47,9 @@ public class ScanRepositoryIT extends TestBase {
 //        URI repositoryURI = URI.create("file:///home/kama/test-supose/bass/");
         
 //        URI repositoryURI = URI.create("file:///home/hadoop/test-repos/bass/");
-        URI repositoryURI = URI.create("file:///home/apache/asfrepos/");
+        URI repositoryURI = URI.create("file:///Users/kama/test-supose/repos/");
         
-        File indexDirectory = new File("/home/apache/results/asfrepos/");
+        File indexDirectory = new File("/Users/kama/ws-git/multithreading/target/index");
 
 //        RevisionRange range = new RevisionRange(1, 50);
         RevisionRange range = RevisionRange.ALL;

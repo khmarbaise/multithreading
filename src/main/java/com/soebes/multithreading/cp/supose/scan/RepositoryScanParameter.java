@@ -7,27 +7,26 @@ import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 
 import com.soebes.multithreading.cp.RevisionRange;
 
-public class RepositoryScanParameter {
+public class RepositoryScanParameter
+{
 
     private ISVNAuthenticationManager authenticationManager;
-    
-    private URI uri;
-    
-    private File indexDirectory;
-    
-    private RevisionRange revisionRange;
 
+    private URI uri;
+
+    private File indexDirectory;
+
+    private RevisionRange revisionRange;
 
     /**
      * @param authenticationManager The authentication manager which is used to authenticate.
-     * @param uri
-     *            The access URI to the repository either <code>file:///</code>, <code>http://</code>,
+     * @param uri The access URI to the repository either <code>file:///</code>, <code>http://</code>,
      *            <code>https://</code> or <code>svn://</code>.
-     * 
-     * @param indexDirectory
-     *            The directory of the index which will be created.
+     * @param indexDirectory The directory of the index which will be created.
      */
-    public RepositoryScanParameter(ISVNAuthenticationManager authenticationManager, URI uri, File indexDirectory, RevisionRange revisionRange) {
+    public RepositoryScanParameter( ISVNAuthenticationManager authenticationManager, URI uri, File indexDirectory,
+                                    RevisionRange revisionRange )
+    {
         super();
         this.authenticationManager = authenticationManager;
         this.uri = uri;
@@ -35,39 +34,48 @@ public class RepositoryScanParameter {
         this.revisionRange = revisionRange;
     }
 
-    public RepositoryScanParameter(ISVNAuthenticationManager authenticationManager, URI uri, File indexDirectory) {
-	this(authenticationManager, uri, indexDirectory,RevisionRange.ALL);
+    public RepositoryScanParameter( ISVNAuthenticationManager authenticationManager, URI uri, File indexDirectory )
+    {
+        this( authenticationManager, uri, indexDirectory, RevisionRange.ALL );
     }
 
-    public ISVNAuthenticationManager getAuthenticationManager() {
+    public ISVNAuthenticationManager getAuthenticationManager()
+    {
         return authenticationManager;
     }
 
-    public void setAuthenticationManager(ISVNAuthenticationManager authenticationManager) {
+    public void setAuthenticationManager( ISVNAuthenticationManager authenticationManager )
+    {
         this.authenticationManager = authenticationManager;
     }
 
-    public File getIndexDirectory() {
+    public File getIndexDirectory()
+    {
         return indexDirectory;
     }
 
-    public void setIndexDirectory(File indexDirectory) {
+    public void setIndexDirectory( File indexDirectory )
+    {
         this.indexDirectory = indexDirectory;
     }
 
-	public URI getUri() {
-		return uri;
-	}
+    public URI getUri()
+    {
+        return uri;
+    }
 
-	public void setUri(URI uri) {
-		this.uri = uri;
-	}
+    public void setUri( URI uri )
+    {
+        this.uri = uri;
+    }
 
-	public RevisionRange getRevisionRange() {
-	    return revisionRange;
-	}
+    public RevisionRange getRevisionRange()
+    {
+        return revisionRange;
+    }
 
-	public void setRevisionRange(RevisionRange revisionRange) {
-	    this.revisionRange = revisionRange;
-	}
+    public void setRevisionRange( RevisionRange revisionRange )
+    {
+        this.revisionRange = revisionRange;
+    }
 }
